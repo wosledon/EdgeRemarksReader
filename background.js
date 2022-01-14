@@ -33,6 +33,10 @@ var remarkReader = {
                     synth.speak(utterance);
 
                     this.global_engine = synth;
+                })
+                .then(()=>{
+                    this.bilibiliLive();
+                    this.catFmLive();
                 });
         }
 
@@ -47,7 +51,6 @@ var remarkReader = {
     },
 
     bilibiliLive: function () {
-        var chatBoxId = "chat-items";
         var that = this;
 
         $("#chat-items").bind("DOMNodeInserted", function (event) {
@@ -121,14 +124,28 @@ var remarkReader = {
         });
     },
 
+    catFmLive: function () {
+        console.log(1)
+        $(".message-list").bind("DOMNodeInserted", function (event) {
+            console.log(2)
+        })
+
+        $('.message-list').on('onchange', function(){
+            console.log(3)
+        })
+    },
+
     init: function () {
         this.initVoiceEngine();
-        this.bilibiliLive();
+        // this.bilibiliLive();
+        // this.catFmLive();
     }
 }
 
 $(function () {
     $(document).ready(function () {
+        console.log("启动");
         remarkReader.init();
+        
     });
 })

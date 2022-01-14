@@ -19,6 +19,7 @@
     "content_scripts": [{
         "matches": ["http://*/", "https://*/", "http://*/*", "https://*/*", "http://*/*/*", "https://*/*/*", "http://*/*/*/*", "https://*/*/*/*"],
         "js": ["jquery-3.3.1.js","background.js"],
-        "css": ["popup.css"]
+        "css": ["popup.css"],
+        "run_at":"document_end"
     }]
 }
