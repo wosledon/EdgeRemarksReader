@@ -1,0 +1,25 @@
+.panel{
+    width: 200px;
+    height: 250px;
+}
+
+.panel button{
+    width: 80px;
+    height: 40px;
+}
+
+.title h5{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.content{
+    text-align: center;
+    margin-top: -40px;
+}
+
+.content img{
+    width: 180px;
+    height: 180px;
+    margin-top: 45px;
+}
