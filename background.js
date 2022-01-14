@@ -50,60 +50,73 @@ var remarkReader = {
         var chatBoxId = "chat-items";
         var that = this;
 
-        $("#chat-items").bind("DOMNodeInserted", function (e) {
+        $("#chat-items").bind("DOMNodeInserted", function (event) {
+            var element = event.target;
 
-            var chats = $("#chat-items>.chat-item").last();
-            var name = chats.attr('data-uname');
-            var content = chats.attr('data-danmaku')
-            var command = typeof (content) == "undefined" ? "" : content.split("+");
-            console.log(command)
-            if (command.length >= 2) {
-                switch (command[0].trim()) {
-                    case "语音模式":
-                        switch (command[1].trim()) {
-                            case "普通话":
-                                that.global_voices_index = 15;
-                                that.toSpeak("普通话模式已启动。");
-                                return;
-                            case "粤语":
-                                that.global_voices_index = 14;
-                                that.toSpeak("粤语模式已启动。");
-                                return;
-                            case "猛男模式":
-                                that.global_voices_index = 16;
-                                that.toSpeak("猛男模式已启动。");
-                                return;
-                        }
-                        return;
-                    case "添加短语":
-                        that.global_messages.push(command[1]);
-                        that.toSpeak("短语" + command[1] + "已添加。");
-                        return;
-                    // case "短语列表":
-                    //     // chat-input
-                    //     // live-skin-highlight-button-bg
+            if ($(element).hasClass('danmaku-item')) {
+                console.log("聊天")
 
-                    //     // for (var i = 0; i < that.global_messages.length; i++) {
-                    //     //     setTimeout(() => {
-                    //     //         $(".chat-input").val(i + ":" + that.global_messages[i])
-                    //     //         $(".bl-button .live-skin-highlight-button-bg .live-skin-button-text .bl-button--primary .bl-button--small").click();
-                    //     //     }, 1 * 1000);
-                    //     // }
-                    //     // that.global_messages.push(command[1]);
-                    //     return;
-                    case "删除短语":
-                        var index = parseInt(command[1]);
-                        var dContext = that.global_messages[index];
-                        delete that.global_messages[index];
-                        that.toSpeak("短语" + dContext + "已删除。");
-                        return;
+                var chats = $("#chat-items > .chat-item").last();
+                var name = chats.attr('data-uname');
+                var content = chats.attr('data-danmaku')
+                var command = typeof (content) == "undefined" ? "" : content.split("+");
+                console.log(command)
+                if (command.length >= 2) {
+                    switch (command[0].trim()) {
+                        case "语音模式":
+                            switch (command[1].trim()) {
+                                case "普通话":
+                                    that.global_voices_index = 15;
+                                    that.toSpeak("普通话模式已启动。");
+                                    return;
+                                case "粤语":
+                                    that.global_voices_index = 14;
+                                    that.toSpeak("粤语模式已启动。");
+                                    return;
+                                case "猛男模式":
+                                    that.global_voices_index = 16;
+                                    that.toSpeak("猛男模式已启动。");
+                                    return;
+                            }
+                            return;
+                        case "添加短语":
+                            that.global_messages.push(command[1]);
+                            that.toSpeak("短语" + command[1] + "已添加。");
+                            return;
+                            // case "短语列表":
+                            //     // chat-input
+                            //     // live-skin-highlight-button-bg
+
+                            //     // for (var i = 0; i < that.global_messages.length; i++) {
+                            //     //     setTimeout(() => {
+                            //     //         $(".chat-input").val(i + ":" + that.global_messages[i])
+                            //     //         $(".bl-button .live-skin-highlight-button-bg .live-skin-button-text .bl-button--primary .bl-button--small").click();
+                            //     //     }, 1 * 1000);
+                            //     // }
+                            //     // that.global_messages.push(command[1]);
+                            //     return;
+                        case "删除短语":
+                            var index = parseInt(command[1]);
+                            var dContext = that.global_messages[index];
+                            delete that.global_messages[index];
+                            that.toSpeak("短语" + dContext + "已删除。");
+                            return;
+                    }
+                }
+
+                console.log(that.global_messages)
+
+                if (typeof (name) != "undefined") {
+                    that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
                 }
             }
 
-            console.log(that.global_messages)
-
-            if (typeof (name) != "undefined") {
-                that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
+            if ($(element).hasClass('gift-item')) {
+                var name = $(element).children('.username').text();
+                var gift = $(element).children('.gift-name').text();
+                var num = $(element).children('.gift-num').text().replace("x", "乘");
+                console.log("礼物用户", name)
+                that.toSpeak("感谢" + name + "赠送的" + gift + num);
             }
         });
     },
