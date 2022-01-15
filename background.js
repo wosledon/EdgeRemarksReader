@@ -152,10 +152,14 @@ var remarkReader = {
     },
 
     chatXiaoAi: function (that, name, text) {
+        // // 输出第一个使用插件页面的url
+        // if (pups.length) {
+        //     console.log(pups[0].location.href)
+        // }
         // $.ajax({
         //     url: 'http://jiuli.xiaoapi.cn/i/xiaoai_tts.php?msg=' + text,
         //     type: "GET",
-        //     contentType: 'text/html',
+        //     dataType:'jsonp',
         //     success: function (res) {
         //         var result = JSON.parse(res);
         //         that.toSpeak(name + '同学，' + result.text.replace('小爱', '我'));
