@@ -34,7 +34,7 @@ var remarkReader = {
 
                     this.global_engine = synth;
                 })
-                .then(()=>{
+                .then(() => {
                     this.bilibiliLive();
                     this.catFmLive();
                 });
@@ -111,6 +111,7 @@ var remarkReader = {
 
                 if (typeof (name) != "undefined") {
                     that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
+                    that.chatXiaoAi(that, name, content)
                 }
             }
 
@@ -130,7 +131,7 @@ var remarkReader = {
             console.log(2)
         })
 
-        $('.message-list').on('onchange', function(){
+        $('.message-list').on('onchange', function () {
             console.log(3)
         })
     },
@@ -141,14 +142,29 @@ var remarkReader = {
         // this.catFmLive();
     },
 
-    initButton: function(){
+    initButton: function () {
         $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
-        $('#start_helper').click(()=>{
+        $('#start_helper').click(() => {
             remarkReader.init();
-            $('#start_helper').attr("disabled","disabled").css("background-color","gray");
+            $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
         });
+        //$('.upper-row').append("<iframe id='xiaoaiframe' src=''></iframe>")
+    },
 
-        
+    chatXiaoAi: function (that, name, text) {
+        // $.ajax({
+        //     url: 'http://jiuli.xiaoapi.cn/i/xiaoai_tts.php?msg=' + text,
+        //     type: "GET",
+        //     contentType: 'text/html',
+        //     success: function (res) {
+        //         var result = JSON.parse(res);
+        //         that.toSpeak(name + '同学，' + result.text.replace('小爱', '我'));
+        //     },
+        //     error: function (err) {
+        //         that.toSpeak(name + '同学，不好意思，我听不懂你在说什么！');
+        //         console.log(111, err)
+        //     }
+        // })
     }
 }
 
@@ -159,5 +175,5 @@ $(function () {
         remarkReader.initButton();
     });
 
-    
+
 })
