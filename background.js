@@ -139,13 +139,25 @@ var remarkReader = {
         this.initVoiceEngine();
         // this.bilibiliLive();
         // this.catFmLive();
+    },
+
+    initButton: function(){
+        $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
+        $('#start_helper').click(()=>{
+            remarkReader.init();
+            $('#start_helper').attr("disabled","disabled").css("background-color","gray");
+        });
+
+        
     }
 }
 
 $(function () {
     $(document).ready(function () {
-        console.log("启动");
-        remarkReader.init();
-        
+        // console.log("启动");
+        // remarkReader.init();
+        remarkReader.initButton();
     });
+
+    
 })
