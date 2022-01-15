@@ -17,11 +17,8 @@
         "default_popup": "popup.html"
     },
     "content_scripts": [{
-        "matches": ["http://*/", "https://*/", "http://*/*", "https://*/*", "http://*/*/*", "https://*/*/*", "http://*/*/*/*", "https://*/*/*/*"],
+        "matches": ["*://live.bilibili.com/*"],
         "js": ["jquery-3.3.1.js","background.js"],
         "css": ["popup.css"]
-    }],
-    "externally_connectable":{
-        "matches":["*://*.bilibili.com/*"]
-    }
+    }]
 }

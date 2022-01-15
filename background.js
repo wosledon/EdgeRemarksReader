@@ -28,7 +28,7 @@ var remarkReader = {
                     global_voices = voices;
                     const utterance = new SpeechSynthesisUtterance();
                     utterance.voice = voices[this.global_voices_index];
-                    utterance.text = "语音功能已启动！输入“普通话”、“粤语”或“猛男模式”即可切换语音模式！";
+                    utterance.text = "语音助手已启动！";
 
                     synth.speak(utterance);
 
