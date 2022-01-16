@@ -26,7 +26,7 @@ var remarkReader = {
                     const synth = window.speechSynthesis;
 
                     var voices = synth.getVoices();
-                    console.log(voices)
+                    console.log("========>音频引擎加载完成<========")
                     global_voices = voices;
                     const utterance = new SpeechSynthesisUtterance();
                     utterance.voice = voices[this.global_voices_index];
@@ -55,13 +55,10 @@ var remarkReader = {
             var element = event.target;
 
             if ($(element).hasClass('danmaku-item')) {
-                console.log("聊天")
-
                 var chats = $("#chat-items > .chat-item").last();
                 var name = chats.attr('data-uname');
                 var content = chats.attr('data-danmaku')
                 var command = typeof (content) == "undefined" ? "" : content.split("+");
-                console.log(command)
                 if (command.length >= 2) {
                     switch (command[0].trim()) {
                         case "语音模式":
@@ -117,7 +114,6 @@ var remarkReader = {
                 var name = $(element).children('.username').text();
                 var gift = $(element).children('.gift-name').text();
                 var num = $(element).children('.gift-num').text().replace("x", "乘");
-                console.log("礼物用户", name)
                 that.toSpeak("感谢" + name + "赠送的" + gift + num);
             }
         });
@@ -137,7 +133,6 @@ var remarkReader = {
             }
             that.global_cache = content;
             var command = typeof (content) == "undefined" ? "" : content.split("+");
-            console.log(command)
             if (command.length >= 2) {
                 switch (command[0].trim()) {
                     case "语音模式":
@@ -185,10 +180,33 @@ var remarkReader = {
 
             if (typeof (name) != "undefined" && name != "" && name != null) {
                 if(typeof (gift) != "undefined" && gift != "" && gift != null){
-                    that.toSpeak("感谢" + name + content + gift + "，感谢你的支持，么么~")
+                    that.toSpeak("感谢" + name + content+ "，感谢你的支持，摸摸~")
                 }else{
-                    //that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
+                    that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
                     //that.chatXiaoAi(that, name, content)
+                }
+            }
+        })
+
+        $("#ChatBox").bind("DOMNodeInserted", function (event) {
+            var element = event.target;
+
+            // var name1 = $("#ChatBox").find('.join-queue-effect').find('.username').text();
+            // var name2 = $("#ChatBox").find('.join-user').text();
+
+            if($(element).hasClass('join-queue-effect')){
+                var name = $(element).find('.username').text();
+                if(typeof (name) != "undefined" && name != "" && name != null){
+                    console.log("欢迎" + name + "进入直播间！");
+                    that.toSpeak("欢迎" + name + "进入直播间！");
+                }
+            }
+            
+            if($(element).find('join-user')){
+                var name = $(element).find('.join-user').text();
+                if(typeof (name) != "undefined" && name != "" && name != null){
+                    console.log("欢迎" + name + "进入直播间！");
+                    that.toSpeak("欢迎匿名大佬进入直播间！");
                 }
             }
         })
@@ -196,8 +214,6 @@ var remarkReader = {
 
     init: function () {
         this.initVoiceEngine();
-
-        //this.catFmLive();
     },
 
     initEngine: function () {
@@ -241,12 +257,10 @@ var remarkReader = {
 
 $(function () {
     $(document).ready(function () {
-        // console.log("启动");
-        // remarkReader.init();
         $('head').append('<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">');
         console.log("启动");
         setTimeout(() => {
-            remarkReader.initEngine();
+            remarkReader.initEngine();            
         }, 2 * 1000);
     });
 })
