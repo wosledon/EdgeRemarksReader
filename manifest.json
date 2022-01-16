@@ -17,7 +17,7 @@
         "default_popup": "popup.html"
     },
     "content_scripts": [{
-        "matches": ["*://live.bilibili.com/*"],
+        "matches": ["*://live.bilibili.com/*","*://fm.missevan.com/*"],
         "js": ["jquery-3.3.1.js","background.js"],
         "css": ["popup.css"]
     }]

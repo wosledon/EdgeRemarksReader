@@ -138,8 +138,8 @@ var remarkReader = {
 
     init: function () {
         this.initVoiceEngine();
-        // this.bilibiliLive();
-        // this.catFmLive();
+        this.bilibiliLive();
+        //this.catFmLive();
     },
 
     initButton: function () {
