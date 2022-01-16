@@ -15,6 +15,8 @@ var remarkReader = {
         "拿着肥皂对你说"
     ],
 
+    global_cache: null,
+
     // 加载语音引擎
     initVoiceEngine: function () {
         const synthVoice = () => {
@@ -33,10 +35,6 @@ var remarkReader = {
                     synth.speak(utterance);
 
                     this.global_engine = synth;
-                })
-                .then(() => {
-                    this.bilibiliLive();
-                    this.catFmLive();
                 });
         }
 
@@ -126,28 +124,97 @@ var remarkReader = {
     },
 
     catFmLive: function () {
-        console.log(1)
+        var that = this;
         $(".message-list").bind("DOMNodeInserted", function (event) {
-            console.log(2)
-        })
+            //join-queue-effect show
+            var element = event.target;
 
-        $('.message-list').on('onchange', function () {
-            console.log(3)
+            var name = $(element).find('.username').text();
+            var content = $(element).find('.message-content').text();
+            var gift = $(element).find('.gift').text();
+            if(that.global_cache == content){
+                return;
+            }
+            that.global_cache = content;
+            var command = typeof (content) == "undefined" ? "" : content.split("+");
+            console.log(command)
+            if (command.length >= 2) {
+                switch (command[0].trim()) {
+                    case "语音模式":
+                        switch (command[1].trim()) {
+                            case "普通话":
+                                that.global_voices_index = 15;
+                                that.toSpeak("普通话模式已启动。");
+                                return;
+                            case "粤语":
+                                that.global_voices_index = 14;
+                                that.toSpeak("粤语模式已启动。");
+                                return;
+                            case "猛男模式":
+                                that.global_voices_index = 16;
+                                that.toSpeak("猛男模式已启动。");
+                                return;
+                        }
+                        return;
+                    case "添加短语":
+                        that.global_messages.push(command[1]);
+                        that.toSpeak("短语" + command[1] + "已添加。");
+                        return;
+                        // case "短语列表":
+                        //     // chat-input
+                        //     // live-skin-highlight-button-bg
+
+                        //     // for (var i = 0; i < that.global_messages.length; i++) {
+                        //     //     setTimeout(() => {
+                        //     //         $(".chat-input").val(i + ":" + that.global_messages[i])
+                        //     //         $(".bl-button .live-skin-highlight-button-bg .live-skin-button-text .bl-button--primary .bl-button--small").click();
+                        //     //     }, 1 * 1000);
+                        //     // }
+                        //     // that.global_messages.push(command[1]);
+                        //     return;
+                    case "删除短语":
+                        var index = parseInt(command[1]);
+                        var dContext = that.global_messages[index];
+                        delete that.global_messages[index];
+                        that.toSpeak("短语" + dContext + "已删除。");
+                        return;
+                }
+            }
+
+            console.log(that.global_messages)
+
+            if (typeof (name) != "undefined" && name != "" && name != null) {
+                if(typeof (gift) != "undefined" && gift != "" && gift != null){
+                    that.toSpeak("感谢" + name + content + gift + "，感谢你的支持，么么~")
+                }else{
+                    //that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
+                    //that.chatXiaoAi(that, name, content)
+                }
+            }
         })
     },
 
     init: function () {
         this.initVoiceEngine();
-        this.bilibiliLive();
+
         //this.catFmLive();
     },
 
-    initButton: function () {
+    initEngine: function () {
         $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
         $('#start_helper').click(() => {
             remarkReader.init();
+            this.bilibiliLive();
             $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
         });
+
+        $(".info-row:first-child").append('<button style="margin-left:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
+        $('#start_helper').click(() => {
+            remarkReader.init();
+            this.catFmLive();
+            $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
+        });
+
         //$('.upper-row').append("<iframe id='xiaoaiframe' src=''></iframe>")
     },
 
@@ -176,8 +243,10 @@ $(function () {
     $(document).ready(function () {
         // console.log("启动");
         // remarkReader.init();
-        remarkReader.initButton();
+        $('head').append('<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">');
+        console.log("启动");
+        setTimeout(() => {
+            remarkReader.initEngine();
+        }, 2 * 1000);
     });
-
-
 })
