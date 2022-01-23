@@ -5,7 +5,7 @@ var remarkReader = {
 
     global_engine: null,
     global_voices: null,
-    global_voices_index: 17,
+    global_voices_index: 15,
     global_messages: [
         "脱下裤子说",
         "偷偷亲了你一口说",
@@ -21,7 +21,8 @@ var remarkReader = {
         "拼命码字的说",
         "站在冷风中说",
         "萌哒哒的说",
-        "拍了拍主播的脑袋说"
+        "拍了拍主播的脑袋说",
+        "抱着小哥哥吧唧一大口说"
     ],
 
     global_vip: {
@@ -30,13 +31,17 @@ var remarkReader = {
         "消极人员_熙泽": "骑着哈雷说",
         "藏起奶糖的小兔子尾巴": "拼命码字的说",
         "一言_熙泽": "gay里gay气的说",
-        "CV卡加_熙泽": "茶里茶气的说"
+        "CV卡加_熙泽": "茶里茶气的说",
+        "懒鬼_熙泽": "亲了一口胖胖说",
+        "我大概是只废汪":"抱着小哥哥吧唧一大口说"
     },
 
     global_cache: null,
+    global_cache_name: null,
 
     global_blacklist: [
         //"藏起奶糖的小兔子尾巴"
+        "如崽i"
     ],
 
     global_referred: {
@@ -47,7 +52,9 @@ var remarkReader = {
         "老宫___": "铁柱",
         "一言_熙泽": "言言",
         "雲尘是只猫_YLey": "雲尘",
-        "CV卡加_熙泽": "加加哥哥"
+        "CV卡加_熙泽": "加加哥哥",
+        "使至塞上": "王维",
+        "懒鬼_熙泽": "胖胖的懒懒哥哥"
     },
 
     global_emoji: {
@@ -184,6 +191,7 @@ var remarkReader = {
                 return;
             }
             that.global_cache = content;
+
             var command = typeof (content) == "undefined" ? "" : content.split("+");
             if (command.length >= 2) {
                 switch (command[0].trim()) {
@@ -229,6 +237,24 @@ var remarkReader = {
                         delete that.global_messages[index];
                         that.toSpeak("短语" + dContext + "已删除。");
                         return;
+                    case "r":
+                        // content = command[1];
+                        // if (content.length > 15 || content.length <= 1) {
+                        //     return;
+                        // }
+                        // for (var key in that.global_emoji) {
+                        //     if (content.indexOf(key) >= 0) {
+                        //         content = content.replace(key, that.global_emoji[key])
+                        //         console.log(key, that.global_emoji[key])
+                        //         continue;
+                        //     }
+                        // }
+                        // that.toSpeak((typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) +
+                        //     "，" +
+                        //     (typeof (that.global_vip[name]) == "undefined" ?
+                        //         that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
+                        //         that.global_vip[name]) + "：" + content);
+                        return;
                     case "pb":
                         return;
                 }
@@ -250,11 +276,20 @@ var remarkReader = {
                             continue;
                         }
                     }
-                    that.toSpeak((typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) +
+
+                    var isSpeakName = true;
+                    if (that.global_cache_name == name) {
+                        isSpeakName = false;
+                    }
+                    that.global_cache_name = name;
+
+                    var speakContent = (isSpeakName ? (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]):"") +
                         "，" +
-                        (typeof (that.global_vip[name]) == "undefined" ?
+                        (isSpeakName?(typeof (that.global_vip[name]) == "undefined" ?
                             that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
-                            that.global_vip[name]) + "：" + content);
+                            that.global_vip[name]):"") + "：" + content
+
+                    that.toSpeak(speakContent);
                     //that.chatXiaoAi(that, name, content)
                 }
 
