@@ -283,7 +283,7 @@ var remarkReader = {
                     }
                     that.global_cache_name = name;
 
-                    var speakContent = (isSpeakName ? (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]):"") +
+                    var speakContent = (isSpeakName ? (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]):"").replace("_","") +
                         "，" +
                         (isSpeakName?(typeof (that.global_vip[name]) == "undefined" ?
                             that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
