@@ -41,7 +41,8 @@ var remarkReader = {
 
     global_blacklist: [
         //"藏起奶糖的小兔子尾巴"
-        "如崽i"
+        "如崽i",
+        "丹丹是樱桃的公主殿下"
     ],
 
     global_referred: {
