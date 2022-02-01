@@ -22,7 +22,8 @@ var remarkReader = {
         "站在冷风中说",
         "萌哒哒的说",
         "拍了拍主播的脑袋说",
-        "抱着小哥哥吧唧一大口说"
+        "抱着小哥哥吧唧一大口说",
+        "在塞巴斯蒂安怀里说"
     ],
 
     global_vip: {
@@ -32,7 +33,8 @@ var remarkReader = {
         "藏起奶糖的小兔子尾巴": "拼命码字的说",
         "一言_熙泽": "gay里gay气的说",
         "CV卡加_熙泽": "茶里茶气的说",
-        "我大概是只废汪":"抱着小哥哥吧唧一大口说"
+        "我大概是只废汪":"抱着小哥哥吧唧一大口说",
+        "顾府小幺儿":"在塞巴斯蒂安怀里说"
     },
 
     global_cache: null,
@@ -41,7 +43,8 @@ var remarkReader = {
     global_blacklist: [
         //"藏起奶糖的小兔子尾巴"
         "如崽i",
-        "丹丹是樱桃的公主殿下"
+        "丹丹是樱桃的公主殿下",
+        "丹丹整天睡死了"
     ],
 
     global_referred: {
@@ -288,7 +291,7 @@ var remarkReader = {
                             that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
                             that.global_vip[name]):"") + "：" + content
 
-                    that.toSpeak(speakContent);
+                    //that.toSpeak(speakContent.replace("_", ""));
                     //that.chatXiaoAi(that, name, content)
                 }
 
@@ -304,8 +307,8 @@ var remarkReader = {
             if ($(element).hasClass('join-queue-effect')) {
                 var name = $(element).find('.username').text();
                 if (typeof (name) != "undefined" && name != "" && name != null) {
-                    console.log("欢迎" + name + "进入直播间！");
-                    that.toSpeak("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！");
+                    console.log("欢迎" + name + "进入直播间！新年快乐呀！");
+                    that.toSpeak("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！新年快乐呀！");
                 }
             }
 
@@ -313,7 +316,7 @@ var remarkReader = {
                 var name = $(element).find('.join-user').text();
                 if (typeof (name) != "undefined" && name != "" && name != null) {
                     console.log("欢迎" + name + "进入直播间！");
-                    that.toSpeak("欢迎匿名大佬进入直播间！");
+                    that.toSpeak("欢迎匿名大佬进入直播间！新年快乐呀！");
                 }
             }
         })
