@@ -5,7 +5,8 @@ var remarkReader = {
 
     global_engine: null,
     global_voices: null,
-    global_voices_index: 15,
+    global_voices_index: 16,
+    global_is_chat: false,
     global_messages: [
         "脱下裤子说",
         "偷偷亲了你一口说",
@@ -200,20 +201,28 @@ var remarkReader = {
                     case "语音模式":
                         switch (command[1].trim()) {
                             case "普通话":
-                                that.global_voices_index = 15;
+                                that.global_voices_index = 16;
                                 that.toSpeak("普通话模式已启动。");
                                 return;
                             case "粤语":
-                                that.global_voices_index = 14;
+                                that.global_voices_index = 15;
                                 that.toSpeak("粤语模式已启动。");
                                 return;
                             case "猛男模式":
-                                that.global_voices_index = 16;
+                                that.global_voices_index = 17;
                                 that.toSpeak("猛男模式已启动。");
                                 return;
                             case "台妹模式":
-                                that.global_voices_index = 17;
+                                that.global_voices_index = 18;
                                 that.toSpeak("台妹模式已启动。");
+                                return;
+                            case "日语模式":
+                                that.global_voices_index = 52;
+                                that.toSpeak("hentai, あなたは素敵な私を呼び出します?");
+                                return;
+                            case "韩语模式":
+                                that.global_voices_index = 55;
+                                that.toSpeak("오빠~~오늘날그리워하니?");
                                 return;
                         }
                         return;
@@ -259,6 +268,18 @@ var remarkReader = {
                         return;
                     case "pb":
                         return;
+                    case "弹幕阅读":
+                        switch(command[1].trim()){
+                            case "开启":
+                                that.global_is_chat = true;
+                                that.toSpeak("弹幕阅读已开启。");
+                                return;
+                            case "关闭":
+                                that.global_is_chat = false;
+                                that.toSpeak("弹幕阅读已关闭。");
+                                return;
+                        }
+                        return;
                 }
             }
 
@@ -291,6 +312,10 @@ var remarkReader = {
                             that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
                             that.global_vip[name]):"") + "：" + content
 
+                    if(that.global_is_chat){
+                        let chat_content = speakContent.replace("_", "");
+                        that.toSpeak(chat_content.replace("_", ""));
+                    }
                     //that.toSpeak(speakContent.replace("_", ""));
                     //that.chatXiaoAi(that, name, content)
                 }
@@ -305,10 +330,10 @@ var remarkReader = {
             // var name2 = $("#ChatBox").find('.join-user').text();
 
             if ($(element).hasClass('join-queue-effect')) {
-                var name = $(element).find('.username').text();
+                var name = $(element).find('.username').text(); 
                 if (typeof (name) != "undefined" && name != "" && name != null) {
-                    console.log("欢迎" + name + "进入直播间！新年快乐呀！");
-                    that.toSpeak("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！新年快乐呀！");
+                    console.log("欢迎" + name + "进入直播间！");
+                    that.toSpeak("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！");
                 }
             }
 
@@ -316,7 +341,7 @@ var remarkReader = {
                 var name = $(element).find('.join-user').text();
                 if (typeof (name) != "undefined" && name != "" && name != null) {
                     console.log("欢迎" + name + "进入直播间！");
-                    that.toSpeak("欢迎匿名大佬进入直播间！新年快乐呀！");
+                    that.toSpeak("欢迎匿名大佬进入直播间！");
                 }
             }
         })
