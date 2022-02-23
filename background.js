@@ -24,7 +24,14 @@ var remarkReader = {
         "萌哒哒的说",
         "拍了拍主播的脑袋说",
         "抱着小哥哥吧唧一大口说",
-        "在塞巴斯蒂安怀里说"
+        "在塞巴斯蒂安怀里说",
+        "抱着隔壁老王说",
+        "倍感离谱地说",
+        "气急败坏地说",
+        "亲了一口巴卫说",
+        "感到摸不着头脑说",
+        "把主播头发染绿了之后说",
+        "被帅大叔抱怀里说",
     ],
 
     global_vip: {
@@ -59,7 +66,8 @@ var remarkReader = {
         "雲尘是只猫_YLey": "雲尘",
         "CV卡加_熙泽": "加加哥哥",
         "使至塞上": "王维",
-        "苏子烟_":"烟宝"
+        "苏子烟_":"烟宝",
+        "正常一般聪明":"默默"
     },
 
     global_emoji: {
@@ -400,6 +408,9 @@ var remarkReader = {
         //         console.log(111, err)
         //     }
         // })
+        fetch('http://jiuli.xiaoapi.cn/i/xiaoai_tts.php?msg=' + text).then(response => response.json())
+            .then(data => console.log('ttttttttttttttt'+data))
+            .catch(e => console.log("Oops, error", e))
     }
 }
 
