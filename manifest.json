@@ -1,10 +1,16 @@
 {
     "name": "弹幕读取器",
-    "version": "1.0",
-    "manifest_version": 2,
+    "version": "1.3",
+    "manifest_version": 3,
     "description": "弹幕读取器",
-    "permissions": [
-        "http://*/*"
+    // "permissions": [
+    //     "http://*/*"
+    // ],
+    // "optional_permissions": [
+    //     "unlimitedStorage"
+    // ],
+    "host_permissions": [
+        "*://*/*"
     ],
     "icons": {
         "16": "images/get_started16.png",
@@ -12,13 +18,23 @@
         "45": "images/get_started48.png",
         "128": "images/get_started128.png"
     },
-    "browser_action": {
-        "default_icon": "images/get_started16.png",
-        "default_popup": "popup.html"
-    },
-    "content_scripts": [{
-        "matches": ["*://live.bilibili.com/*","*://fm.missevan.com/*"],
-        "js": ["jquery-3.3.1.js","background.js"],
-        "css": ["popup.css"]
-    }]
+    // "browser_action": {
+    //     "default_icon": "images/get_started16.png",
+    //     "default_popup": "popup.html"
+    // },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://live.bilibili.com/*",
+                "*://fm.missevan.com/*"
+            ],
+            "js": [
+                "jquery-3.3.1.js",
+                "background.js"
+            ],
+            "css": [
+                "popup.css"
+            ]
+        }
+    ]
 }
