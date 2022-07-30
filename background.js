@@ -5,8 +5,17 @@ var remarkReader = {
 
     global_engine: null,
     global_voices: null,
-    global_voices_index: 16,
+    global_voices_index: 61,
     global_is_chat: false,
+    global_is_speak: true,
+    global_visit_list: [],
+    global_voices_list: {
+        xiaoxiao: 0,
+        2: 0,
+        3: 0,
+        4: 0
+    },
+
     global_messages: [
         "脱下裤子说",
         "偷偷亲了你一口说",
@@ -17,7 +26,7 @@ var remarkReader = {
         "流着口水说",
         "一边偷看王寡妇洗澡一边说",
         "拿着肥皂对你说",
-        "在基德怀里说", //使之塞上
+        //"在基德怀里说", //使之塞上
         "拿着生发液喷了喷主播说",
         "拼命码字的说",
         "站在冷风中说",
@@ -42,9 +51,9 @@ var remarkReader = {
         "藏起奶糖的小兔子尾巴": "拼命码字的说",
         "一言_熙泽": "gay里gay气的说",
         "CV卡加_熙泽": "茶里茶气的说",
-        "我大概是只废汪":"抱着小哥哥吧唧一大口说",
-        "顾府小幺儿":"在塞巴斯蒂安怀里说",
-        "苏子烟_":"抱了抱胖胖说"
+        "我大概是只废汪": "抱着小哥哥吧唧一大口说",
+        "顾府小幺儿": "在塞巴斯蒂安怀里说",
+        "苏子烟_": "抱了抱胖胖说"
     },
 
     global_cache: null,
@@ -67,8 +76,8 @@ var remarkReader = {
         "雲尘是只猫_YLey": "雲尘",
         "CV卡加_熙泽": "加加哥哥",
         "使至塞上": "王维",
-        "苏子烟_":"烟宝",
-        "正常一般聪明":"默默"
+        "苏子烟_": "烟宝",
+        "正常一般聪明": "默默"
     },
 
     global_emoji: {
@@ -95,6 +104,7 @@ var remarkReader = {
                     var voices = synth.getVoices();
                     console.log("========>音频引擎加载完成<========")
                     console.log(voices)
+
                     global_voices = voices;
                     const utterance = new SpeechSynthesisUtterance();
                     utterance.voice = voices[this.global_voices_index];
@@ -113,7 +123,24 @@ var remarkReader = {
         const utterance = new SpeechSynthesisUtterance();
         utterance.voice = global_voices[this.global_voices_index];
         utterance.text = text;
-        this.global_engine.speak(utterance);
+        if (this.global_is_speak) {
+            this.global_engine.speak(utterance)
+        };
+    },
+
+    initVoiceList: function () {
+        var that = this;
+        // 加载语音列表
+        for (var i = 0; i < global_voices.length; i++) {
+            if (global_voices[i].name.indexOf("Xiaoxiao") >= 0) {
+                that.global_voices_list.xiaoxiao = i;
+                that.global_voices_index = i;
+            }
+        }
+
+        that.toSpeak("语音加载成功");
+
+        console.log("晓晓语音:" + that.global_voices_index)
     },
 
     bilibiliLive: function () {
@@ -132,19 +159,19 @@ var remarkReader = {
                         case "语音模式":
                             switch (command[1].trim()) {
                                 case "普通话":
-                                    that.global_voices_index = 15;
+                                    that.global_voices_index = 16;
                                     that.toSpeak("普通话模式已启动。");
                                     return;
                                 case "粤语":
-                                    that.global_voices_index = 14;
+                                    that.global_voices_index = 15;
                                     that.toSpeak("粤语模式已启动。");
                                     return;
                                 case "猛男模式":
-                                    that.global_voices_index = 16;
+                                    that.global_voices_index = 17;
                                     that.toSpeak("猛男模式已启动。");
                                     return;
                                 case "台妹模式":
-                                    that.global_voices_index = 17;
+                                    that.global_voices_index = 18;
                                     that.toSpeak("台妹模式已启动。");
                                     return;
                             }
@@ -175,7 +202,7 @@ var remarkReader = {
                     }
                 }
 
-                console.log(that.global_messages)
+                //console.log(that.global_messages)
 
                 if (typeof (name) != "undefined") {
                     that.toSpeak(name + "，" + that.global_messages[Math.floor(Math.random() * that.global_messages.length)] + "：" + content);
@@ -212,7 +239,7 @@ var remarkReader = {
                     case "语音模式":
                         switch (command[1].trim()) {
                             case "普通话":
-                                that.global_voices_index = 16;
+                                that.global_voices_index = that.global_voices_list[1];
                                 that.toSpeak("普通话模式已启动。");
                                 return;
                             case "粤语":
@@ -280,7 +307,7 @@ var remarkReader = {
                     case "pb":
                         return;
                     case "弹幕阅读":
-                        switch(command[1].trim()){
+                        switch (command[1].trim()) {
                             case "开启":
                                 that.global_is_chat = true;
                                 that.toSpeak("弹幕阅读已开启。");
@@ -294,7 +321,7 @@ var remarkReader = {
                 }
             }
 
-            console.log(that.global_messages)
+            //console.log(that.global_messages)
 
             if (that.global_blacklist.indexOf(name) < 0 && typeof (name) != "undefined" && name != "" && name != null && typeof (parseInt(content)) != "undefined") {
                 if (typeof (gift) != "undefined" && gift != "" && gift != null) {
@@ -317,13 +344,13 @@ var remarkReader = {
                     }
                     that.global_cache_name = name;
 
-                    var speakContent = (isSpeakName ? (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]):"").replace("_","") +
+                    var speakContent = (isSpeakName ? (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) : "").replace("_", "") +
                         "，" +
-                        (isSpeakName?(typeof (that.global_vip[name]) == "undefined" ?
+                        (isSpeakName ? (typeof (that.global_vip[name]) == "undefined" ?
                             that.global_messages[Math.floor(Math.random() * that.global_messages.length)] :
-                            that.global_vip[name]):"") + "：" + content
+                            that.global_vip[name]) : "") + "：" + content
 
-                    if(that.global_is_chat){
+                    if (that.global_is_chat) {
                         let chat_content = speakContent.replace("_", "");
                         that.toSpeak(chat_content.replace("_", ""));
                     }
@@ -341,10 +368,11 @@ var remarkReader = {
             // var name2 = $("#ChatBox").find('.join-user').text();
 
             if ($(element).hasClass('join-queue-effect')) {
-                var name = $(element).find('.username').text(); 
+                var name = $(element).find('.username').text();
                 if (typeof (name) != "undefined" && name != "" && name != null) {
                     console.log("欢迎" + name + "进入直播间！");
                     that.toSpeak("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！");
+                    that.maoerFmSendMessage("欢迎" + (typeof (that.global_referred[name]) == "undefined" ? name : that.global_referred[name]) + "进入直播间！");
                 }
             }
 
@@ -353,9 +381,30 @@ var remarkReader = {
                 if (typeof (name) != "undefined" && name != "" && name != null) {
                     console.log("欢迎" + name + "进入直播间！");
                     that.toSpeak("欢迎匿名大佬进入直播间！");
+                    that.maoerFmSendMessage("欢迎匿名大佬进入直播间！");
                 }
             }
         })
+    },
+
+    uuid: function () {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
+    },
+
+    maoerFmSendMessage: function (message) {
+        // $('.input-box > input').value = message
+        // $('.input-box > input').trigger('oninput onpropertychange');
+        // $('.btn-send').click();
     },
 
     init: function () {
@@ -367,21 +416,40 @@ var remarkReader = {
     },
 
     initEngine: function () {
-        $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
-        // $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="end_helper">关闭小助手</button>');
-        $('#start_helper').click(() => {
-            remarkReader.init();
-            this.bilibiliLive();
-            $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
-        });
+        // $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
+        // $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="init_voices">加载语音</button>');
+        // // $(".upper-row").append('<button style="margin-right:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="end_helper">关闭小助手</button>');
+        // $('#start_helper').click(() => {
+        //     remarkReader.init();
+        //     this.bilibiliLive();
+        //     $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
+        // });
 
 
         $(".info-row:first-child").append('<button style="margin-left:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">启动小助手</button>');
+        $(".info-row:first-child").append('<button style="margin-left:20px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="init_voices">加载语音</button>');
+        $(".info-row:first-child").append('<button style="margin-left:20px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="close_helper">语音开关</button>');
+        $(".info-row:first-child").append('<button style="margin-left:20px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="visit_helper">打开房间管理</button>');
+
         // $(".info-row:first-child").append('<button style="margin-left:40px;width:100px;height:30px;background-color:#2b88ad;border-radius:5px;color:white;border:0px;cursor:pointer;" id="start_helper">关闭小助手</button>');
         $('#start_helper').click(() => {
             remarkReader.init();
             this.catFmLive();
             $('#start_helper').attr("disabled", "disabled").css("background-color", "gray");
+        });
+        $('#init_voices').click(() => {
+            remarkReader.initVoiceList();
+        });
+        $('#close_helper').click(() => {
+            remarkReader.global_is_speak = !remarkReader.global_is_speak;
+            if (remarkReader.global_is_speak) {
+                alert("语音打开成功");
+            } else {
+                alert("语音关闭成功");
+            }
+        });
+        $('#visit_helper').click(() => {
+            //console.log(layer)
         });
         // $('#end_helper').click(() => {
         //     remarkReader.close();
@@ -410,7 +478,7 @@ var remarkReader = {
         //     }
         // })
         fetch('http://jiuli.xiaoapi.cn/i/xiaoai_tts.php?msg=' + text).then(response => response.json())
-            .then(data => console.log('ttttttttttttttt'+data))
+            .then(data => console.log('ttttttttttttttt' + data))
             .catch(e => console.log("Oops, error", e))
     }
 }
@@ -420,6 +488,7 @@ $(function () {
         $('head').append('<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">');
         console.log("启动");
         setTimeout(() => {
+            //importScript("layer.js")
             remarkReader.initEngine();
             // $('.input-container').find('input').setAttribute("value", 123456);
             // $('.input-container').find('.btn-send').click();
